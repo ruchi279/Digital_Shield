@@ -18,7 +18,8 @@ with tab1:
         if transcript.strip():
             with st.spinner("Analyzing psychological phases..."):
                 try:
-                    response = requests.post("http://localhost:8000/api/analyze-text", json={"transcript": transcript})
+                    # UPDATED: Pointing to your live Render API
+                    response = requests.post("https://digital-shield-api.onrender.com/api/analyze-text", json={"transcript": transcript})
                     if response.status_code == 200:
                         data = response.json()
                         score = data["risk_score"]
@@ -35,7 +36,7 @@ with tab1:
                             for phase in data["triggered_phases"]:
                                 st.markdown(f"- **{phase.capitalize()} Manipulation**: Scammer used terms like {data['evidence'][phase]}")
                 except Exception:
-                    st.error("⚠️ Connection Error: Is your Docker API running on port 8000?")
+                    st.error("⚠️ Connection Error: Is your Docker API running?")
         else:
             st.warning("Please paste a transcript first.")
 
@@ -50,7 +51,8 @@ with tab2:
                 try:
                     files = {"file": (audio_file.name, audio_file.getvalue(), audio_file.type)}
                     data = {"transcript": audio_transcript}
-                    response = requests.post("http://localhost:8000/api/analyze-call", data=data, files=files)
+                    # UPDATED: Pointing to your live Render API
+                    response = requests.post("https://digital-shield-api.onrender.com/api/analyze-call", data=data, files=files)
                     
                     if response.status_code == 200:
                         result = response.json()
